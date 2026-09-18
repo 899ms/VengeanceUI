@@ -1197,6 +1197,14 @@
     ]
   },
   {
+    "name": "vengeance-theme",
+    "dependencies": [],
+    "type": "registry:theme",
+    "files": [
+      "public/r/vengeance-theme.json"
+    ]
+  },
+  {
     "name": "verse-cards",
     "dependencies": [
       "gsap",

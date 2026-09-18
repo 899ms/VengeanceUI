@@ -44,9 +44,9 @@
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
 
-  --radius-lg: var(--radius);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-sm: calc(var(--radius) - 4px);
+  --radius-lg: var(--vng-radius-lg);
+  --radius-md: var(--vng-radius-md);
+  --radius-sm: var(--vng-radius-sm);
 
   --animate-accordion-down: accordion-down 0.2s ease-out;
   --animate-accordion-up: accordion-up 0.2s ease-out;
@@ -97,23 +97,44 @@
   }
 
   :root {
-    --background: var(--color-white);
-    --foreground: var(--color-zinc-950);
+    /* Shared VengeanceUI tokens. Override these in your own stylesheet. */
+    --vng-background: var(--color-white);
+    --vng-foreground: var(--color-zinc-950);
+    --vng-border: var(--color-zinc-200);
+    --vng-primary: var(--color-zinc-950);
+    --vng-primary-hover: var(--color-zinc-800);
+    --vng-primary-foreground: var(--color-white);
+    --vng-secondary: var(--color-zinc-100);
+    --vng-secondary-foreground: var(--color-zinc-950);
+    --vng-danger: var(--color-red-600);
+    --vng-success: var(--color-green-600);
+    --vng-warning: var(--color-yellow-500);
+    --vng-radius-sm: 4px;
+    --vng-radius-md: 6px;
+    --vng-radius-lg: 8px;
+    --vng-space-xs: 0.5rem;
+    --vng-space-sm: 0.75rem;
+    --vng-space-md: 1rem;
+    --vng-space-lg: 2rem;
+    --vng-transition-speed: 150ms;
+
+    --background: var(--vng-background);
+    --foreground: var(--vng-foreground);
     --card: var(--color-white);
     --card-foreground: var(--color-zinc-950);
     --popover: var(--color-white);
     --popover-foreground: var(--color-zinc-950);
-    --primary: var(--color-zinc-950);
-    --primary-foreground: var(--color-white);
-    --secondary: var(--color-zinc-100);
-    --secondary-foreground: var(--color-zinc-950);
+    --primary: var(--vng-primary);
+    --primary-foreground: var(--vng-primary-foreground);
+    --secondary: var(--vng-secondary);
+    --secondary-foreground: var(--vng-secondary-foreground);
     --muted: var(--color-zinc-100);
     --muted-foreground: var(--color-zinc-500);
     --accent: var(--color-zinc-100);
     --accent-foreground: var(--color-zinc-950);
-    --destructive: var(--color-red-600);
+    --destructive: var(--vng-danger);
     --destructive-foreground: var(--color-white);
-    --border: var(--color-zinc-200);
+    --border: var(--vng-border);
     --input: var(--color-zinc-200);
     --ring: var(--color-zinc-950);
     --chart-1: var(--color-blue-500);
@@ -121,27 +142,36 @@
     --chart-3: var(--color-purple-500);
     --chart-4: var(--color-indigo-400);
     --chart-5: var(--color-red-500);
-    --radius: 0.5rem
+    --radius: var(--vng-radius-lg);
   }
 
   .dark {
-    --background: var(--color-zinc-950);
-    --foreground: var(--color-white);
+    --vng-background: var(--color-zinc-950);
+    --vng-foreground: var(--color-white);
+    --vng-border: var(--color-zinc-800);
+    --vng-primary: var(--color-white);
+    --vng-primary-hover: var(--color-zinc-200);
+    --vng-primary-foreground: var(--color-zinc-950);
+    --vng-secondary: var(--color-zinc-800);
+    --vng-secondary-foreground: var(--color-white);
+
+    --background: var(--vng-background);
+    --foreground: var(--vng-foreground);
     --card: var(--color-zinc-950);
     --card-foreground: var(--color-white);
     --popover: var(--color-zinc-950);
     --popover-foreground: var(--color-white);
-    --primary: var(--color-white);
-    --primary-foreground: var(--color-zinc-950);
-    --secondary: var(--color-zinc-800);
-    --secondary-foreground: var(--color-white);
+    --primary: var(--vng-primary);
+    --primary-foreground: var(--vng-primary-foreground);
+    --secondary: var(--vng-secondary);
+    --secondary-foreground: var(--vng-secondary-foreground);
     --muted: var(--color-zinc-800);
     --muted-foreground: var(--color-zinc-400);
     --accent: var(--color-zinc-800);
     --accent-foreground: var(--color-white);
-    --destructive: var(--color-red-600);
+    --destructive: var(--vng-danger);
     --destructive-foreground: var(--color-white);
-    --border: var(--color-zinc-800);
+    --border: var(--vng-border);
     --input: var(--color-zinc-800);
     --ring: var(--color-white);
   }
@@ -199,7 +229,7 @@
 
   /* Snappier link/button transitions */
   a, button {
-    transition-duration: 100ms;
+    transition-duration: var(--vng-transition-speed);
   }
 
   /* GPU-composite only the heavy animated containers so they don't

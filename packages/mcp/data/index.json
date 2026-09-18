@@ -6050,6 +6050,15 @@
       "description": "Bouncy SVG-shaped tooltips with spring animations"
     },
     {
+      "name": "vengeance-theme",
+      "type": "registry:theme",
+      "dependencies": [],
+      "inCatalog": false,
+      "slug": null,
+      "category": null,
+      "description": null
+    },
+    {
       "name": "verse-cards",
       "type": "registry:ui",
       "dependencies": [
