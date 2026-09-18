@@ -38,6 +38,7 @@ const SIDEBAR_SECTIONS: Array<{
     items: [
       { name: "Install Next.js", href: "/docs/install-nextjs" },
       { name: "Install Tailwind CSS", href: "/docs/install-tailwind" },
+      { name: "Theming", href: "/docs/theming" },
       { name: "Add utilities", href: "/docs/add-utilities" },
       { name: "CLI", href: "/docs/cli" },
     ],
