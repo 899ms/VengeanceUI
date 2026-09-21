@@ -22,6 +22,7 @@ const INTERACTION_DEFERRED_PREVIEWS = new Set([
   "interactive-particles",
   "liquid-ocean",
   "liquid-text",
+  "model-viewer",
   "ripple-displacement-slider",
   "scroll-dissolve-reveal",
   "wave-grid-background",
