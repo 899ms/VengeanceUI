@@ -3,7 +3,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { ComponentDocsSections } from "@/components/docs/component-docs-sections";
-import { DeferredSourceCode } from "@/components/docs/deferred-source-code";
+import { DeferredHighlightedCodeBlock } from "@/components/ui/deferred-highlighted-code-block";
 import { ComponentPreviewPanel } from "@/components/ui/component-preview-panel";
 import { COMPONENT_DOCS } from "@/lib/component-docs";
 import { getShadcnAddCommand } from "@/lib/registry";
@@ -89,10 +89,10 @@ export function ComponentShowcase({
         </ComponentPreviewPanel>
 
         {/* Code Block */}
-        <TabsContent value="code" lazy>
+        <TabsContent value="code">
           <div id="code" className="scroll-mt-24" />
           <div className="mt-4">
-            <DeferredSourceCode componentName={componentName} fallbackSource={fallbackSource} />
+            <DeferredHighlightedCodeBlock componentName={componentName} />
           </div>
         </TabsContent>
       </Tabs>
