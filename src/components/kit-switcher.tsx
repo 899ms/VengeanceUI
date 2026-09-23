@@ -23,7 +23,7 @@ const getKitIdFromPathnameInternal = (path: string, availableKits: Array<{ id: s
     return defaultKitId
 }
 
-export function KitSwitcher() {
+export function KitSwitcher({ onNavigate }: { onNavigate?: () => void } = {}) {
     const router = useRouter()
     const pathname = usePathname()
     const [storedKitId, setStoredKitId] = useState<string>(() => {
@@ -48,12 +48,14 @@ export function KitSwitcher() {
 
     const handleKitChange = (newlySelectedKitId: string) => {
         if (newlySelectedKitId === 'quartz-kit') {
-            window.open('https://www.vengeanceui.com/premium', '_blank')
+            window.open('https://www.vengeanceui.com/premium', '_blank', 'noopener,noreferrer')
+            onNavigate?.()
             return
         }
 
         setStoredKitId(newlySelectedKitId)
         localStorage.setItem(STORAGE_KEY, newlySelectedKitId)
+        onNavigate?.()
 
         if (newlySelectedKitId === 'vengeance-kit') {
             router.push('/')

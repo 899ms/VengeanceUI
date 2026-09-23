@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { useState, useCallback, memo } from "react";
+import { useState, memo } from "react";
 import { cn } from "@/lib/utils";
 import { Terminal, Wrench } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -180,7 +180,7 @@ export function ComponentDocsSections({ componentName, docs, fallbackSource }: C
               <Terminal className="h-4 w-4" />
               CLI
             </TabsTrigger>
-            <TabsTrigger value="manual" className="gap-2 px-3 py-1.5 text-sm h-8 font-medium text-neutral-500 dark:text-zinc-400 hover:text-neutral-700 dark:hover:text-zinc-300">
+            <TabsTrigger value="manual" className="gap-2 px-3 py-1.5 text-sm h-8 font-medium">
               <Wrench className="h-4 w-4" />
               Manual
             </TabsTrigger>

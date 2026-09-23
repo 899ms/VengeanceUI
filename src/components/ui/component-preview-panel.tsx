@@ -3,7 +3,6 @@
 import * as React from "react";
 import { PictureInPicture2, TerminalSquare } from "lucide-react";
 import { TabsContent, TabsContext, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { cn } from "@/lib/utils";
 
 interface ComponentPreviewPanelProps {
   installCommand?: string;
@@ -54,7 +53,7 @@ export function ComponentPreviewPanel({
             <PictureInPicture2 className="h-4 w-4" />
             Preview
           </TabsTrigger>
-          <TabsTrigger value="code" className="gap-2 px-3 py-1.5 text-sm h-8 font-medium text-neutral-500 dark:text-zinc-400 hover:text-neutral-700 dark:hover:text-zinc-300">
+          <TabsTrigger value="code" className="gap-2 px-3 py-1.5 text-sm h-8 font-medium">
             <TerminalSquare className="h-4 w-4" />
             Code
           </TabsTrigger>

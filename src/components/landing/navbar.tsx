@@ -1,11 +1,11 @@
 'use client'
-import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useState, useMemo, memo, useCallback, useEffect } from 'react'
+import { useState, useMemo, memo, useCallback, useEffect, useRef } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { ThemeToggle } from '@/components/theme-toggle'
+import { KitSwitcher } from '@/components/kit-switcher'
 import { cn } from '@/lib/utils'
 import { Menu, Star, X } from 'lucide-react'
 import LogoIcon from '@/assets/logo/logo-icon'
@@ -122,12 +122,43 @@ const GitHubStarLink = memo(function GitHubStarLink({ className }: { className?:
 export const Navbar = memo(function Navbar() {
     const pathname = usePathname()
     const [isOpen, setIsOpen] = useState(false)
+    const headerRef = useRef<HTMLElement>(null)
+    const menuButtonRef = useRef<HTMLButtonElement>(null)
 
     const isActive = useCallback((path: string) => {
         return pathname === path || pathname.startsWith(`${path}/`)
     }, [pathname])
 
     const closeMenu = useCallback(() => setIsOpen(false), [])
+
+    useEffect(() => {
+        if (!isOpen) return
+
+        const onKeyDown = (event: KeyboardEvent) => {
+            if (event.key === 'Escape') {
+                closeMenu()
+                menuButtonRef.current?.focus()
+            }
+        }
+        const onPointerDown = (event: PointerEvent) => {
+            // Radix renders the search dialog and kit list outside the header.
+            if (event.target instanceof Element && event.target.closest('[data-slot="dialog-content"], [data-slot="select-content"]')) return
+            if (!headerRef.current?.contains(event.target as Node)) closeMenu()
+        }
+        const desktopBreakpoint = window.matchMedia('(min-width: 870px)')
+        const onBreakpointChange = () => {
+            if (desktopBreakpoint.matches) closeMenu()
+        }
+
+        document.addEventListener('keydown', onKeyDown)
+        document.addEventListener('pointerdown', onPointerDown)
+        desktopBreakpoint.addEventListener('change', onBreakpointChange)
+        return () => {
+            document.removeEventListener('keydown', onKeyDown)
+            document.removeEventListener('pointerdown', onPointerDown)
+            desktopBreakpoint.removeEventListener('change', onBreakpointChange)
+        }
+    }, [closeMenu, isOpen])
 
     // Pre-compute active states to avoid recalculating in render
     const activeStates = useMemo(() => ({
@@ -136,13 +167,14 @@ export const Navbar = memo(function Navbar() {
     }), [isActive])
 
     return (
-        <header className="sticky top-0 isolate z-[200] border-b border-neutral-200 bg-background/95 dark:border-[#222] dark:bg-[#050608]/95">
+        <header ref={headerRef} className="sticky top-0 isolate z-[200] border-b border-neutral-200 bg-background/95 dark:border-[#222] dark:bg-[#050608]/95">
             <div className="w-full px-4 md:px-8 xl:px-8">
                 <div>
                     <div className="flex items-center justify-between py-3 lg:py-4">
                         <Link
                             href="/"
                             className="flex w-fit items-center gap-3"
+                            onClick={closeMenu}
                             prefetch={true}>
                             <LogoIcon className="w-6 text-foreground rotate-180" />
                             <span className="font-orbitron text-xl font-bold tracking-tight -ml-2">Vengeance UI</span>
@@ -189,11 +221,14 @@ export const Navbar = memo(function Navbar() {
                             <ThemeToggle />
 
                             <Button
+                                ref={menuButtonRef}
                                 variant="ghost"
                                 size="icon"
                                 onClick={() => setIsOpen((prev) => !prev)}
                                 className="size-8"
-                                aria-label="Toggle menu">
+                                aria-label={isOpen ? "Close menu" : "Open menu"}
+                                aria-expanded={isOpen}
+                                aria-controls="mobile-navigation">
                                 {isOpen ? <X className="size-5" /> : <Menu className="size-5" />}
                             </Button>
                         </div>
@@ -205,6 +240,7 @@ export const Navbar = memo(function Navbar() {
             <AnimatePresence>
                 {isOpen && (
                     <motion.div
+                        id="mobile-navigation"
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: 'auto' }}
                         exit={{ opacity: 0, height: 0 }}
@@ -212,7 +248,11 @@ export const Navbar = memo(function Navbar() {
                         className="absolute left-0 right-0 top-full overflow-hidden border-b border-neutral-200 bg-background/98 dark:border-[#222] dark:bg-[#050608]/98 backdrop-blur shadow-2xl min-[870px]:hidden z-50">
                         <div className="flex flex-col gap-3 px-6 py-4">
                             <div className="pb-1">
-                                <NavbarCommandSearch />
+                                <NavbarCommandSearch onNavigate={closeMenu} />
+                            </div>
+
+                            <div className="border-t border-neutral-200/60 pt-3 dark:border-zinc-800/60">
+                                <KitSwitcher onNavigate={closeMenu} />
                             </div>
 
                             <div className="flex flex-col gap-1 border-t border-neutral-200/60 dark:border-zinc-800/60 pt-3">

@@ -6,6 +6,7 @@ import { CopyButton } from "@/components/ui/copy-button";
 import { cn } from "@/lib/utils";
 import { useTheme } from "next-themes";
 import { Highlight, type PrismTheme } from "prism-react-renderer";
+import { selectRegistrySource, type RegistrySourceFile } from "@/lib/registry";
 
 const vibrantLightTheme: PrismTheme = {
   plain: {
@@ -39,14 +40,8 @@ const vibrantDarkTheme: PrismTheme = {
   ],
 };
 
-interface RegistryFile {
-  path?: string;
-  target?: string;
-  content?: string;
-}
-
 interface RegistryItem {
-  files?: RegistryFile[];
+  files?: RegistrySourceFile[];
 }
 
 interface SourceRequestState {
@@ -61,15 +56,6 @@ interface DeferredSourceCodeProps {
   title?: string;
   expandable?: boolean;
   className?: string;
-}
-
-function selectSource(files: RegistryFile[], componentName: string) {
-  const expectedName = `${componentName}.tsx`.toLowerCase();
-  const exact = files.find((file) =>
-    [file.target, file.path].some((candidate) => candidate?.toLowerCase().endsWith(expectedName)),
-  );
-
-  return exact?.content ?? files.find((file) => typeof file.content === "string")?.content;
 }
 
 export function DeferredSourceCode({
@@ -113,7 +99,7 @@ export function DeferredSourceCode({
         if (!response.ok) throw new Error(`Registry returned ${response.status}`);
 
         const item = (await response.json()) as RegistryItem;
-        const content = selectSource(item.files ?? [], componentName);
+        const content = selectRegistrySource(item.files ?? [], componentName);
         if (!content) throw new Error("The registry item does not contain source code");
         setRequestState({ componentName, source: content, error: null });
       } catch (loadError) {
@@ -165,7 +151,7 @@ export function DeferredSourceCode({
       <div className={cn("relative overflow-hidden", expandable && !expanded && "max-h-[440px]")}>
         <div className="overflow-x-auto p-4 text-sm font-mono leading-relaxed scrollbar-hide selection:bg-neutral-200 dark:selection:bg-zinc-800">
           <Highlight theme={currentTheme} code={source} language="tsx">
-            {({ className: _className, style, tokens, getLineProps, getTokenProps }) => (
+            {({ style, tokens, getLineProps, getTokenProps }) => (
               <pre style={{ ...style, backgroundColor: "transparent", margin: 0, padding: 0 }}>
                 {tokens.map((line, i) => (
                   <div key={i} {...getLineProps({ line })} className="table-row">

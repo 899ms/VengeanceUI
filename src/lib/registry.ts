@@ -19,3 +19,23 @@ export function getRegistryItemUrl(componentName: string) {
 export function getShadcnAddCommand(componentName: string, packageManager: PackageManager = "npm") {
   return `${PACKAGE_MANAGER_EXECUTORS[packageManager]} shadcn@latest add ${getRegistryItemUrl(componentName)}`;
 }
+
+export interface RegistrySourceFile {
+  path?: string;
+  target?: string;
+  content?: string;
+}
+
+export function selectRegistryFile(files: RegistrySourceFile[], componentName: string) {
+  const expectedName = `${componentName}.tsx`.toLowerCase();
+  const exact = files.find((file) =>
+    typeof file.content === "string" &&
+    [file.target, file.path].some((candidate) => candidate?.toLowerCase().endsWith(expectedName)),
+  );
+
+  return exact ?? files.find((file) => typeof file.content === "string");
+}
+
+export function selectRegistrySource(files: RegistrySourceFile[], componentName: string) {
+  return selectRegistryFile(files, componentName)?.content;
+}
