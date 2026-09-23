@@ -1,17 +1,19 @@
 "use client";
 
 import * as React from "react";
-import { PictureInPicture2, TerminalSquare } from "lucide-react";
+import { PictureInPicture2, Terminal, TerminalSquare } from "lucide-react";
+import { CopyButton } from "@/components/ui/copy-button";
 import { TabsContent, TabsContext, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface ComponentPreviewPanelProps {
-  installCommand?: string;
+  installCommand: string;
   deferUntilInteraction?: boolean;
   previewName?: string;
   children: React.ReactNode;
 }
 
 export function ComponentPreviewPanel({
+  installCommand,
   deferUntilInteraction = false,
   previewName = "component",
   children,
@@ -47,7 +49,7 @@ export function ComponentPreviewPanel({
 
   return (
     <>
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
         <TabsList className="mb-0">
           <TabsTrigger value="preview" className="gap-2 px-3 py-1.5 text-sm h-8 font-medium">
             <PictureInPicture2 className="h-4 w-4" />
@@ -58,6 +60,31 @@ export function ComponentPreviewPanel({
             Code
           </TabsTrigger>
         </TabsList>
+
+        <div className="flex w-full min-w-0 items-center gap-2 rounded-xl border border-neutral-200 bg-neutral-50 px-1.5 py-1.5 text-xs text-neutral-600 shadow-sm dark:border-white/10 dark:bg-black dark:text-zinc-300 dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] lg:w-auto lg:max-w-[70%]">
+          <div className="inline-flex size-6 shrink-0 items-center justify-center rounded-md bg-neutral-100 text-neutral-400 dark:bg-zinc-800 dark:text-zinc-500">
+            <Terminal className="size-3.5" />
+          </div>
+          <span className="min-w-0 flex-1 truncate font-mono text-neutral-500 dark:text-zinc-400">
+            {(() => {
+              const parts = installCommand.split(" ");
+              const shadcnIndex = parts.findIndex((part) => part.includes("shadcn@latest") || part.includes("shadcn-ui@latest"));
+              const addIndex = parts.findIndex((part) => part === "add");
+
+              if (shadcnIndex === -1 || addIndex === -1) return installCommand;
+
+              return (
+                <>
+                  <span className="text-indigo-500 dark:text-[#a0a0cc]">{parts.slice(0, shadcnIndex).join(" ")}</span>{" "}
+                  <span className="text-cyan-600 dark:text-[#8bb8d0]">{parts[shadcnIndex]}</span>{" "}
+                  <span className="text-neutral-500 dark:text-[#a1a1aa]">add</span>{" "}
+                  <span className="text-amber-600 dark:text-[#c9a87c]">{parts.slice(addIndex + 1).join(" ")}</span>
+                </>
+              );
+            })()}
+          </span>
+          <CopyButton code={installCommand} className="ml-auto size-7 shrink-0 border-neutral-200 bg-transparent hover:bg-neutral-100 dark:border-white/10 dark:hover:bg-white/10" />
+        </div>
       </div>
 
       <TabsContent value="preview">
