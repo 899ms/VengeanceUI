@@ -16,17 +16,6 @@ interface ComponentShowcaseProps {
   children: React.ReactNode; // The live component itself
 }
 
-const INTERACTION_DEFERRED_PREVIEWS = new Set([
-  "books-showcase",
-  "circular-gallery",
-  "interactive-particles",
-  "liquid-ocean",
-  "liquid-text",
-  "ripple-displacement-slider",
-  "scroll-dissolve-reveal",
-  "wave-grid-background",
-]);
-
 function readFallbackSource(componentName: string) {
   const registryItem = path.join(process.cwd(), "public", "r", `${componentName}.json`);
   if (fs.existsSync(registryItem)) {
@@ -63,7 +52,6 @@ export function ComponentShowcase({
 }: ComponentShowcaseProps) {
   const installCommand = getShadcnAddCommand(componentName);
   const docs = COMPONENT_DOCS[slug] || COMPONENT_DOCS[componentName] || null;
-  const deferPreview = INTERACTION_DEFERRED_PREVIEWS.has(slug);
   const fallbackSource = readFallbackSource(componentName);
 
   return (
@@ -80,11 +68,7 @@ export function ComponentShowcase({
 
       {/* The Showcase Toggle */}
       <Tabs defaultValue="preview" className="space-y-4">
-        <ComponentPreviewPanel
-          installCommand={installCommand}
-          deferUntilInteraction={deferPreview}
-          previewName={title}
-        >
+        <ComponentPreviewPanel installCommand={installCommand}>
           {children}
         </ComponentPreviewPanel>
 

@@ -2345,4 +2345,34 @@ export function BooksShowcaseDemo() {
       },
     ],
   },
+    "model-viewer": {
+    dependencies: "npm install three @react-three/fiber @react-three/drei clsx tailwind-merge",
+    includeUtils: true,
+    manualNotes: [
+      "This is a client component because it renders a WebGL canvas with React Three Fiber.",
+      "Set modelUrl to a .glb file inside your public folder. If the model uses external textures, keep them next to it at the same relative path (for example public/models/Textures/colormap.png).",
+      "Drag to rotate and scroll to zoom. Click the viewer to focus it, then use the arrow keys to rotate.",
+      "The viewer fills its parent's width and is 400px tall by default. Pass className (for example h-[600px]) to change the size.",
+    ],
+    usageCode: `import { ModelViewer } from "@/components/ui/model-viewer"
+
+export function ModelViewerDemo() {
+  return (
+    <ModelViewer
+      modelUrl="/models/sample.glb"
+      className="h-[500px]"
+    />
+  )
+}`,
+    props: [
+      { prop: "modelUrl", type: "string", defaultValue: "'/models/sample.glb'", description: "Path or URL of the .glb model to display." },
+      { prop: "className", type: "string", defaultValue: "-", description: "Additional CSS classes for the viewer container." },
+    ],
+    credits: {
+      author: "GraceyDugar",
+      github: "https://github.com/GraceyDugar",
+      twitter: "https://x.com/CreativeGracey",
+      description: "Designed and contributed the Model Viewer component to the Vengeance UI catalog.",
+    },
+  },
 };
