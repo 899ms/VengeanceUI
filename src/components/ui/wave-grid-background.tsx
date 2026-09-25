@@ -220,38 +220,42 @@ export function WaveGridBackground({
     scene.background = new THREE.Color(colorBase).multiplyScalar(0.5);
 
     // ── Camera (mouse-driven orbit) ────────────────────────────────────────
-    const radius = 12;
     const alphaRange = Math.PI * 0.03;
     const betaRange = Math.PI * 0.05;
     const mouse = new THREE.Vector2(0, 0);
     const lerpedMouse = new THREE.Vector2(0, 0);
 
-    const camera = new THREE.PerspectiveCamera(40, size.width / size.height, 0.1, 200);
+    const camera = new THREE.PerspectiveCamera(40, size.width / size.height, 0.1, 500);
+    let cameraRadius = 12;
+    const fitCamera = () => {
+      const verticalHalfFov = THREE.MathUtils.degToRad(camera.fov) / 2;
+      const horizontalHalfFov = Math.atan(Math.tan(verticalHalfFov) * camera.aspect);
+      const halfBounds = bounds / 2;
+      cameraRadius = Math.max(
+        halfBounds / Math.tan(verticalHalfFov),
+        halfBounds / Math.tan(horizontalHalfFov),
+      ) * 1.12 + cubeHeight;
+    };
     const positionCamera = (mx: number, my: number) => {
       const alpha = my * alphaRange;
       const beta = mx * betaRange;
       camera.position.set(
-        -radius * Math.cos(alpha) * Math.sin(beta),
-        radius * Math.cos(alpha) * Math.cos(beta),
-        radius * Math.sin(alpha),
+        -cameraRadius * Math.cos(alpha) * Math.sin(beta),
+        cameraRadius * Math.cos(alpha) * Math.cos(beta),
+        cameraRadius * Math.sin(alpha),
       );
       camera.up.set(0, 0, -1);
       camera.lookAt(0, 0, 0);
     };
+    fitCamera();
     positionCamera(0, 0);
     scene.add(camera);
-
-    const onMouseMove = (e: MouseEvent) => {
-      mouse.x = (e.clientX / size.width) * 2 - 1;
-      mouse.y = -(e.clientY / size.height) * 2 + 1;
-    };
-    window.addEventListener("mousemove", onMouseMove);
 
     // ── Lighting ───────────────────────────────────────────────────────────
     const ambientLight = new THREE.AmbientLight("#ffffff", 0.5);
     scene.add(ambientLight);
 
-    const keyLight = new THREE.DirectionalLight("#ffffff", 4.0);
+    const keyLight = new THREE.DirectionalLight("#ffffff", 2.5);
     keyLight.position.set(-20, 10, 6);
     keyLight.castShadow = true;
     keyLight.shadow.mapSize.set(1024, 1024);
@@ -313,13 +317,14 @@ export function WaveGridBackground({
 
     const raycaster = new THREE.Raycaster();
     const pointerNDC = new THREE.Vector2();
-    let rect = canvas.getBoundingClientRect();
-
     const onPointerMove = (e: PointerEvent) => {
+      const rect = canvas.getBoundingClientRect();
+      if (!rect.width || !rect.height) return;
       pointerNDC.set(
         ((e.clientX - rect.left) / rect.width) * 2 - 1,
         -((e.clientY - rect.top) / rect.height) * 2 + 1,
       );
+      mouse.copy(pointerNDC);
       raycaster.setFromCamera(pointerNDC, camera);
       const hits = raycaster.intersectObject(rayPlane);
       if (hits.length === 0) return;
@@ -340,6 +345,11 @@ export function WaveGridBackground({
       randomPointTimer = 0;
     };
     canvas.addEventListener("pointermove", onPointerMove);
+    const onPointerLeave = () => {
+      mouse.set(0, 0);
+      lastPoint = null;
+    };
+    canvas.addEventListener("pointerleave", onPointerLeave);
 
     const addRandomPoint = () => {
       const x = (Math.random() * 0.5 - 0.25) * bounds;
@@ -442,7 +452,7 @@ export function WaveGridBackground({
     // ── Renderer + post-processing ─────────────────────────────────────────
     const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.95;
+    renderer.toneMappingExposure = 1.2;
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFShadowMap;
     renderer.setClearColor("#808080");
@@ -462,11 +472,12 @@ export function WaveGridBackground({
       size = getSize();
       camera.aspect = size.width / size.height;
       camera.updateProjectionMatrix();
+      fitCamera();
+      positionCamera(lerpedMouse.x, lerpedMouse.y);
       renderer.setSize(size.width, size.height);
       renderer.setPixelRatio(size.pixelRatio);
       composer.setSize(size.width, size.height);
       composer.setPixelRatio(size.pixelRatio);
-      rect = canvas.getBoundingClientRect();
     };
     const resizeObserver = new ResizeObserver(applySize);
     resizeObserver.observe(container);
@@ -499,9 +510,9 @@ export function WaveGridBackground({
     // ── Cleanup ──────────────────────────────────────────────────────────────
     return () => {
       renderer.setAnimationLoop(null);
-      window.removeEventListener("mousemove", onMouseMove);
       window.removeEventListener("resize", applySize);
       canvas.removeEventListener("pointermove", onPointerMove);
+      canvas.removeEventListener("pointerleave", onPointerLeave);
       resizeObserver.disconnect();
 
       geometry.dispose();
@@ -521,7 +532,7 @@ export function WaveGridBackground({
   return (
     <div ref={containerRef} className={cn("relative h-full w-full overflow-hidden", className)}>
       <canvas ref={canvasRef} className="block h-full w-full" />
-      {children != null && <div className="absolute inset-0">{children}</div>}
+      {children != null && <div className="pointer-events-none absolute inset-0">{children}</div>}
     </div>
   );
 }

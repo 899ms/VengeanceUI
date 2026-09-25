@@ -1532,8 +1532,9 @@ export function AnimatedTooltipDemo() {
     dependencies: "npm install three clsx tailwind-merge",
     includeUtils: true,
     manualNotes: [
-      "Built on raw Three.js (no React Three Fiber needed). It fills its parent, so wrap it in a positioned container with an explicit height.",
+      "Built on raw Three.js (no React Three Fiber needed). It fills its parent and fits the full grid to its container, so wrap it in a positioned container with an explicit height.",
       "The ripples follow the cursor over the canvas; when the pointer is idle it emits gentle random ripples (toggle with `autoAnimate`).",
+      "Content overlays let pointer movement reach the grid. Add `pointer-events-auto` to any child control that should receive clicks.",
       "The wave motion and peak coloring run in a custom GLSL vertex/fragment shader injected via onBeforeCompile, with a vignette + RGB-shift post-processing pass.",
       "Everything is disposed on unmount (renderer, geometries, materials, textures, listeners), so it is safe to mount and unmount.",
     ],
@@ -1542,9 +1543,9 @@ export function AnimatedTooltipDemo() {
 export function WaveGridBackgroundDemo() {
   return (
     <div className="relative h-[520px] w-full overflow-hidden rounded-xl">
-      <WaveGridBackground colorBase="#ffffff" colorHigh="#0055ff">
+      <WaveGridBackground colorBase="#202839" colorHigh="#557cff">
         <div className="flex h-full w-full items-center justify-center">
-          <h2 className="text-6xl font-bold text-white drop-shadow-lg">
+          <h2 className="text-6xl font-bold text-white">
             Wave Grid
           </h2>
         </div>
