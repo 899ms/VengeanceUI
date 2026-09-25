@@ -160,6 +160,16 @@ If you like VengeanceUI, consider giving the repository a star.
 
 It helps the project grow and reach more builders.
 
+## Sponsors
+
+Platform sponsors: [Mintlify](https://www.mintlify.com/), [Sentry](https://sentry.io/), [BrowserStack](https://www.browserstack.com/), [Sarvam AI](https://www.sarvam.ai/), and the [Vercel OSS Program](https://vercel.com/oss).
+
+Community sponsorships help fund the project directly. [See the Diamond, Gold, and Silver plans](https://www.vengenceui.com/sponsors) to have your name or logo displayed here and on the website.
+
+Maintainers: [set up Stripe sponsorship checkout](docs/stripe-sponsorship.md) before enabling online payments.
+
+<!-- Paid community sponsors are added here after their display details are confirmed. -->
+
 ---
 
 ## License

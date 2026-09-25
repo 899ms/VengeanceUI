@@ -145,7 +145,7 @@ export const Navbar = memo(function Navbar() {
             if (event.target instanceof Element && event.target.closest('[data-slot="dialog-content"], [data-slot="select-content"]')) return
             if (!headerRef.current?.contains(event.target as Node)) closeMenu()
         }
-        const desktopBreakpoint = window.matchMedia('(min-width: 870px)')
+        const desktopBreakpoint = window.matchMedia('(min-width: 1024px)')
         const onBreakpointChange = () => {
             if (desktopBreakpoint.matches) closeMenu()
         }
@@ -164,6 +164,7 @@ export const Navbar = memo(function Navbar() {
     const activeStates = useMemo(() => ({
         templates: isActive('/templates'),
         docs: isActive('/docs'),
+        sponsors: isActive('/sponsors'),
     }), [isActive])
 
     return (
@@ -180,7 +181,7 @@ export const Navbar = memo(function Navbar() {
                             <span className="font-orbitron text-xl font-bold tracking-tight -ml-2">Vengeance UI</span>
                         </Link>
 
-                        <div className="-mr-2 hidden items-center gap-4 min-[870px]:flex">
+                        <div className="-mr-2 hidden items-center gap-4 min-[1024px]:flex">
                             <NavbarCommandSearch />
 
                             <div className="flex items-center gap-1">
@@ -209,6 +210,16 @@ export const Navbar = memo(function Navbar() {
                                         Docs
                                     </Link>
                                 </Button>
+
+                                <Button
+                                    asChild
+                                    size="sm"
+                                    variant="ghost"
+                                    className={cn('text-foreground/75 rounded-full', activeStates.sponsors && 'text-foreground')}>
+                                    <Link href="/sponsors" prefetch={true} className="text-sm!" aria-current={activeStates.sponsors ? 'page' : undefined}>
+                                        Sponsors
+                                    </Link>
+                                </Button>
                             </div>
 
                             <div className="flex items-center gap-2">
@@ -217,7 +228,7 @@ export const Navbar = memo(function Navbar() {
                             </div>
                         </div>
 
-                        <div className="-mr-2 flex items-center gap-2 min-[870px]:hidden">
+                        <div className="-mr-2 flex items-center gap-2 min-[1024px]:hidden">
                             <ThemeToggle />
 
                             <Button
@@ -245,8 +256,8 @@ export const Navbar = memo(function Navbar() {
                         animate={{ opacity: 1, height: 'auto' }}
                         exit={{ opacity: 0, height: 0 }}
                         transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                        className="absolute left-0 right-0 top-full overflow-hidden border-b border-neutral-200 bg-background/98 dark:border-[#222] dark:bg-[#050608]/98 backdrop-blur shadow-2xl min-[870px]:hidden z-50">
-                        <div className="flex flex-col gap-3 px-6 py-4">
+                        className="absolute left-0 right-0 top-full overflow-hidden border-b border-neutral-200 bg-background/98 dark:border-[#222] dark:bg-[#050608]/98 backdrop-blur shadow-2xl min-[1024px]:hidden z-50">
+                        <div className="flex max-h-[calc(100dvh-4rem)] flex-col gap-3 overflow-y-auto px-6 py-4">
                             <div className="pb-1">
                                 <NavbarCommandSearch onNavigate={closeMenu} />
                             </div>
@@ -276,6 +287,15 @@ export const Navbar = memo(function Navbar() {
                                         href="/docs/install-nextjs"
                                         onClick={closeMenu}>
                                         Docs
+                                    </Link>
+                                </Button>
+                                <Button
+                                    asChild
+                                    size="sm"
+                                    variant="ghost"
+                                    className={cn('justify-start text-sm font-medium', activeStates.sponsors && 'bg-accent')}>
+                                    <Link href="/sponsors" onClick={closeMenu} aria-current={activeStates.sponsors ? 'page' : undefined}>
+                                        Sponsors
                                     </Link>
                                 </Button>
                             </div>

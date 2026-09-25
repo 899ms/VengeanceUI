@@ -2,7 +2,7 @@
 
 import { startTransition, useCallback, useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Code2, FileText, Home, LayoutGrid, Search, Sparkles } from 'lucide-react'
+import { Code2, FileText, HeartHandshake, Home, LayoutGrid, Search, Sparkles } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import {
     CommandDialog,
@@ -46,6 +46,13 @@ const PAGE_LINKS: PageLink[] = [
         description: 'Start browsing component documentation.',
         section: 'Page',
         icon: FileText,
+    },
+    {
+        title: 'Sponsors',
+        href: '/sponsors',
+        description: 'See who backs Vengeance UI and how to support the project.',
+        section: 'Page',
+        icon: HeartHandshake,
     },
     {
         title: 'Blocks',
