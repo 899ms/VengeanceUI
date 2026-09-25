@@ -1848,7 +1848,7 @@ export function CircularGalleryDemo() {
       "No animation library — the highlight is a single absolutely-positioned element that transitions its transform, size and background-color as the cursor moves between cells.",
       "Pass `rows` as an array of rows, and each row an array of `{ label, color? }`. Rows can hold different numbers of cells; the grid stretches them evenly.",
       "Each cell gets an accent colour from its own `color`, or from the cycled `colors` palette. The label of the highlighted cell turns white so it stays legible over the colour.",
-      "It fills its parent, so give it a height. The highlight re-aligns on resize, and `highlightFirst` parks it on the first cell on mount.",
+      "The grid uses a wide rectangular frame and scrolls horizontally when its labels need more room. The highlight re-aligns on resize, and `highlightFirst` parks it on the first cell on mount.",
       "The surface is transparent so it sits on whatever background you place it over, with borders and labels that adapt to light and dark mode (the hovered cell's label turns white to stay legible over its colour). Set a background via `className` if you want a solid field. Hover-driven, so on touch devices the highlight simply stays put.",
     ],
     usageCode: `import { HighlightGrid } from "@/components/ui/highlight-grid"
