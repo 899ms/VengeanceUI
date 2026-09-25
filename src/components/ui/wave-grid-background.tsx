@@ -255,7 +255,7 @@ export function WaveGridBackground({
     const ambientLight = new THREE.AmbientLight("#ffffff", 0.5);
     scene.add(ambientLight);
 
-    const keyLight = new THREE.DirectionalLight("#ffffff", 2.5);
+    const keyLight = new THREE.DirectionalLight("#ffffff", 4.0);
     keyLight.position.set(-20, 10, 6);
     keyLight.castShadow = true;
     keyLight.shadow.mapSize.set(1024, 1024);
@@ -452,7 +452,7 @@ export function WaveGridBackground({
     // ── Renderer + post-processing ─────────────────────────────────────────
     const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.2;
+    renderer.toneMappingExposure = 1.95;
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFShadowMap;
     renderer.setClearColor("#808080");
