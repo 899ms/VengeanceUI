@@ -1532,7 +1532,7 @@ export function AnimatedTooltipDemo() {
     dependencies: "npm install three clsx tailwind-merge",
     includeUtils: true,
     manualNotes: [
-      "Built on raw Three.js (no React Three Fiber needed). It fills its parent and fits the full grid to its container, so wrap it in a positioned container with an explicit height.",
+      "Built on raw Three.js (no React Three Fiber needed). It fills its parent and covers the container with square cubes, cropping the outer grid where needed. Give its wrapper an explicit height.",
       "The ripples follow the cursor over the canvas; when the pointer is idle it emits gentle random ripples (toggle with `autoAnimate`).",
       "Content overlays let pointer movement reach the grid. Add `pointer-events-auto` to any child control that should receive clicks.",
       "The wave motion and peak coloring run in a custom GLSL vertex/fragment shader injected via onBeforeCompile, with a vignette + RGB-shift post-processing pass.",

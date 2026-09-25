@@ -231,10 +231,12 @@ export function WaveGridBackground({
       const verticalHalfFov = THREE.MathUtils.degToRad(camera.fov) / 2;
       const horizontalHalfFov = Math.atan(Math.tan(verticalHalfFov) * camera.aspect);
       const halfBounds = bounds / 2;
-      cameraRadius = Math.max(
+      // This is a background: cover the rectangular canvas with square cubes
+      // instead of showing the entire square grid with empty side bands.
+      cameraRadius = Math.min(
         halfBounds / Math.tan(verticalHalfFov),
         halfBounds / Math.tan(horizontalHalfFov),
-      ) * 1.12 + cubeHeight;
+      ) * 0.9 + cubeHeight * 0.5;
     };
     const positionCamera = (mx: number, my: number) => {
       const alpha = my * alphaRange;
