@@ -1810,7 +1810,7 @@ export function SearchModalDemo() {
     includeUtils: true,
     manualNotes: [
       "Cards are laid out around a tilted 3D ring with GSAP. The ring auto-rotates gently on its own; drag it to spin, move the cursor to parallax the tilt, and hover a card to lift it and mirror it in the centre preview.",
-      "The original's full-page ScrollTrigger is replaced with drag + auto-rotation, so it works inside any sized container — it fills its parent (`h-full w-full`), so give it an explicit height.",
+      "The original's full-page ScrollTrigger is replaced with drag + auto-rotation. The ring scales to fit its container; it fills its parent (`h-full w-full`), so give it an explicit height.",
       "Pass an `images` array; it's cycled around the ring, so a handful of images fills a large `count`. With no images, neutral placeholder cards are shown. Serve images same-origin (or CORS-enabled) and keep them small — one file is reused many times.",
       "Tune the look with `count`, `radius`, `tilt`, and `itemWidth`/`itemHeight`. Higher `count` means more DOM nodes, so keep it reasonable on low-end devices.",
       "Set `autoRotate={false}` for a static ring, `parallax={false}` to lock the tilt, or `showPreview={false}` to hide the centre image. Adapts to light and dark mode.",

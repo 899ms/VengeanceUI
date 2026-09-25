@@ -83,15 +83,27 @@ export function CircularGallery({
     const angleIncrement = 360 / items.length;
     const baseAngles = items.map((_, i) => i * angleIncrement - 90);
 
-    // Seat each card on the ring, facing outward.
+    // Seat each card on the ring with enough of its face visible at every angle.
     items.forEach((item, i) => {
       gsap.set(item, {
-        rotationY: 90,
+        rotationY: 50,
         rotationZ: baseAngles[i],
         transformOrigin: `50% ${radius}px`,
       });
     });
     gsap.set(gallery, { rotationY: 0 });
+
+    // Keep the full ring inside its container without changing the requested
+    // radius or the card layout when the preview is resized.
+    const fitRing = () => {
+      const { width, height } = root.getBoundingClientRect();
+      if (!width || !height) return;
+      const scale = Math.min(1, (width - 48) / (radius * 2.2), (height - 48) / (radius * 1.7));
+      gsap.set(gallery, { scale: Math.max(0.1, scale) });
+    };
+    const resizeObserver = new ResizeObserver(fitRing);
+    resizeObserver.observe(root);
+    fitRing();
     // Centre preview stays hidden until a card is hovered.
     if (previewWrapRef.current) gsap.set(previewWrapRef.current, { opacity: 0 });
 
@@ -187,6 +199,7 @@ export function CircularGallery({
 
     return () => {
       gsap.ticker.remove(tick);
+      resizeObserver.disconnect();
       visibilityObserver.disconnect();
       document.removeEventListener("visibilitychange", onVisibilityChange);
       reducedMotionQuery.removeEventListener("change", onReducedMotionChange);
@@ -242,7 +255,7 @@ export function CircularGallery({
       {/* The ring */}
       <div
         ref={galleryRef}
-        className="absolute left-1/2 top-[20%] z-10 -translate-x-1/2 [transform-style:preserve-3d]"
+        className="absolute left-1/2 top-[14%] z-10 -translate-x-1/2 [transform-style:preserve-3d]"
       >
         {Array.from({ length: count }).map((_, i) => {
           const src = srcOf(i);
@@ -250,7 +263,7 @@ export function CircularGallery({
             <div
               key={i}
               data-ring-item
-              className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-[3px] bg-neutral-300 shadow-md shadow-black/20 ring-1 ring-black/5 [transform-style:preserve-3d] dark:bg-neutral-700 dark:ring-white/10"
+              className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-[3px] bg-neutral-300 shadow-md shadow-black/20 ring-1 ring-black/10 [transform-style:preserve-3d] dark:bg-neutral-700 dark:ring-white/20"
               style={{ width: itemWidth, height: itemHeight, margin: 10 }}
             >
               {src ? (
@@ -271,7 +284,7 @@ export function CircularGallery({
       {/* Edge vignette so the ring fades softly at the periphery */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 z-20 bg-[radial-gradient(circle_at_50%_45%,transparent_52%,rgba(240,240,242,0.85))] dark:bg-[radial-gradient(circle_at_50%_45%,transparent_46%,rgba(5,5,5,0.9))]"
+        className="pointer-events-none absolute inset-0 z-20 bg-[radial-gradient(circle_at_50%_45%,transparent_60%,rgba(240,240,242,0.6))] dark:bg-[radial-gradient(circle_at_50%_45%,transparent_60%,rgba(5,5,5,0.55))]"
       />
     </div>
   );
